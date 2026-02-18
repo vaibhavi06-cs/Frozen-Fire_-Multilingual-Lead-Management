@@ -1,4 +1,4 @@
-document.getElementById("leadForm").addEventListener("submit", function (e) {
+document.getElementById("leadForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const name = document.getElementById("name").value.trim();
@@ -27,15 +27,38 @@ document.getElementById("leadForm").addEventListener("submit", function (e) {
     return;
   }
 
-  result.style.color = "green";
-  result.innerHTML = `
-    ✅ Thank you <b>${name}</b><br><br>
-    🤖 AI Processing Enabled<br>
-    Lead captured successfully<br>
-    Our team will contact you soon
-  `;
+  // 🔥 Backend ko data bhejna
+  try {
+    const response = await fetch("http://localhost:5000/api/leads", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        phone,
+        message
+      })
+    });
 
-  document.getElementById("leadForm").reset();
+    if (response.ok) {
+      result.style.color = "green";
+      result.innerHTML = `
+        ✅ Thank you <b>${name}</b><br><br>
+        🤖 AI Processing Enabled<br>
+        Lead captured successfully<br>
+        Our team will contact you soon
+      `;
+
+      document.getElementById("leadForm").reset();
+    } else {
+      showError("Server error. Please try again.");
+    }
+
+  } catch (error) {
+    showError("Backend not reachable");
+  }
 });
 
 function showError(msg) {
