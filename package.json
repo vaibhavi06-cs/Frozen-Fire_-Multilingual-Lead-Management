@@ -1,0 +1,21 @@
+{
+  "name": "frozen-fire_-multilingual-lead-management",
+  "version": "1.0.0",
+  "description": "A full-stack web application that detects, translates, and organizes multilingual client inquiries into a centralized CRM dashboard.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vaibhavi06-cs/Frozen-Fire_-Multilingual-Lead-Management.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/vaibhavi06-cs/Frozen-Fire_-Multilingual-Lead-Management/issues"
+  },
+  "homepage": "https://github.com/vaibhavi06-cs/Frozen-Fire_-Multilingual-Lead-Management#readme"
+}
