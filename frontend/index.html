@@ -1,36 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Multilingual Customer Support</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lead Form</title>
+<style>
+  body { font-family:'Segoe UI',Arial,sans-serif; background:linear-gradient(135deg,#6CC1FF,#3A8DFF); display:flex; justify-content:center; align-items:center; min-height:100vh; }
+  .form-container { background:#fff; padding:40px 35px; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.2); width:100%; max-width:500px; }
+  h2 { text-align:center; color:#333; font-size:28px; margin-bottom:10px; }
+  p.subtitle { text-align:center; color:#555; margin-bottom:25px; font-size:16px; }
+  input, textarea { width:100%; padding:12px 15px; margin-bottom:15px; border:1px solid #ccc; border-radius:6px; font-size:14px; resize:none; }
+  button { width:100%; background-color:#3A8DFF; color:white; padding:12px; font-size:16px; border:none; border-radius:6px; cursor:pointer; transition:0.3s; }
+  button:hover { background-color:#306fd0; }
+  #result { margin-top:15px; text-align:center; font-weight:bold; font-size:15px; }
+</style>
 </head>
 <body>
 
-<div class="container">
-  <h1>🌍 Talk to Us in Your Language</h1>
-  <p class="subtitle"><h1>#AI Powered Multilingual Lead System</h1></p>
+<div class="form-container">
+  <h2>Welcome!</h2>
+  <p class="subtitle">Enter your query and we'll get back to you</p>
 
   <form id="leadForm">
-
-    <!-- 1. Name -->
-    <input type="text" id="name" placeholder="Your Name">
-
-    <!-- 2. Email -->
-    <input type="text" id="email" placeholder="Your Email">
-
-    <!-- 3. Phone -->
-    <input type="text" id="phone" placeholder="10-digit Phone Number">
-
-    <!-- 4. Message -->
-    <textarea id="message" placeholder="Your message (min 7 characters)"></textarea>
-
+    <input type="text" id="name" placeholder="Name" required />
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="text" id="phone" placeholder="Phone Number" required />
+    <textarea id="message" placeholder="Enter your query..." rows="5" required></textarea>
     <button type="submit">Submit</button>
   </form>
 
-  <div id="result"></div>
+  <p id="result"></p>
 </div>
 
-<script src="script.js"></script>
+<script>
+document.getElementById("leadForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const message = document.getElementById("message").value.trim();
+  const result = document.getElementById("result");
+
+  try {
+    const response = await fetch("http://127.0.0.1:5000/api/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, phone, message })
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      result.style.color = "green";
+      result.innerHTML = `✅ Lead submitted successfully!<br>Translated message: <b>${data.translatedMessage}</b>`;
+      document.getElementById("leadForm").reset();
+    } else {
+      result.style.color = "red";
+      result.innerText = data.error;
+    }
+  } catch(err) {
+    result.style.color = "red";
+    result.innerText = "❌ Backend not reachable!";
+  }
+});
+</script>
+
 </body>
 </html>
